@@ -104,10 +104,10 @@ exports.genre_delete_get = (req, res, next) => {
   async.parallel(
     {
       genre(callback){
-        Genre.findById(req.body.id).exec(callback);
+        Genre.findById(req.params.id).exec(callback);
       },
       genre_books(callback){
-        Book.find({genre:req.body.id}).exec(callback)
+        Book.find({genre:req.params.id}).exec(callback);
       }
     },
     (err,results)=>{
@@ -130,7 +130,7 @@ exports.genre_delete_post = (req, res, next) => {
         Genre.findById(req.params.id).exec(callback);
       },
       genre_books(callback){
-        Book.find({genre:req.params.id}).populate("author")
+        Book.find({genre:req.params.id})
         .populate("genre")
         .populate("author").exec(callback)
       }
@@ -145,7 +145,7 @@ exports.genre_delete_post = (req, res, next) => {
       }
       Genre.findByIdAndDelete(req.body.id,(err)=>{
         if(err) return next(err);
-        res.redirect('/catalogs/genres');
+        res.redirect('/catalog/genres');
       })
     }
   )
